@@ -112,6 +112,61 @@ struct SettingsView: View {
             Section(header: HStack {
                 Spacer()
                 Button {
+                    fetchGroqModels()
+                } label: {
+                    if isFetchingGroqModels {
+                        ProgressView().controlSize(.small)
+                    } else {
+                        Text(appState.availableGroqModels.isEmpty ? "Fetch Models" : "Refresh")
+                            .font(.caption)
+                    }
+                }
+                .disabled(appState.groqAPIKey.isEmpty || isFetchingGroqModels)
+            }) {
+                HStack(alignment: .center, spacing: 8) {
+                    LeftAlignedTextField(text: $groqKeyInput, isSecure: !showGroqKey)
+                        .frame(maxWidth: .infinity, minHeight: 20)
+                        .id(showGroqKey)
+                    Button(showGroqKey ? "Hide" : "Show") {
+                        showGroqKey.toggle()
+                    }
+                    .buttonStyle(.borderless)
+                }
+
+                HStack {
+                    Button("Save") {
+                        appState.keychainService.store(key: "groq_api_key", value: groqKeyInput)
+                        appState.groqAPIKey = groqKeyInput
+                        groqSaveStatus = "Saved!"
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 2) { groqSaveStatus = "" }
+                    }
+                    .disabled(groqKeyInput.isEmpty)
+
+                    if !groqSaveStatus.isEmpty {
+                        Text(groqSaveStatus).foregroundColor(.green).font(.caption)
+                    }
+                }
+
+                if !appState.availableGroqModels.isEmpty {
+                    HStack {
+                        Text("Model").frame(maxWidth: .infinity, alignment: .leading)
+                        Picker("", selection: $appState.selectedGroqModel) {
+                            ForEach(appState.availableGroqModels) { model in
+                                Text(model.displayName).tag(model.id)
+                            }
+                        }
+                        .labelsHidden()
+                    }
+                }
+
+                if let error = groqModelFetchError {
+                    Text(error).foregroundColor(.red).font(.caption)
+                }
+            }
+
+            Section(header: HStack {
+                Spacer()
+                Button {
                     fetchModels()
                 } label: {
                     if isFetchingModels {
@@ -161,20 +216,7 @@ struct SettingsView: View {
                 }
             }
 
-            Section(header: HStack {
-                Spacer()
-                Button {
-                    fetchGroqModels()
-                } label: {
-                    if isFetchingGroqModels {
-                        ProgressView().controlSize(.small)
-                    } else {
-                        Text(appState.availableGroqModels.isEmpty ? "Fetch Models" : "Refresh")
-                            .font(.caption)
-                    }
-                }
-                .disabled(appState.groqAPIKey.isEmpty || isFetchingGroqModels)
-            }) {
+            Section("Corrections & Features") {
                 Toggle("Spelling Correction", isOn: $appState.correctionModeEnabled)
                 Toggle("Grammar Correction", isOn: $appState.grammarCorrectionEnabled)
 
@@ -195,46 +237,6 @@ struct SettingsView: View {
                             Text(lang).tag(lang)
                         }
                     }
-                }
-
-                HStack(alignment: .center, spacing: 8) {
-                    LeftAlignedTextField(text: $groqKeyInput, isSecure: !showGroqKey)
-                        .frame(maxWidth: .infinity, minHeight: 20)
-                        .id(showGroqKey)
-                    Button(showGroqKey ? "Hide" : "Show") {
-                        showGroqKey.toggle()
-                    }
-                    .buttonStyle(.borderless)
-                }
-
-                HStack {
-                    Button("Save") {
-                        appState.keychainService.store(key: "groq_api_key", value: groqKeyInput)
-                        appState.groqAPIKey = groqKeyInput
-                        groqSaveStatus = "Saved!"
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 2) { groqSaveStatus = "" }
-                    }
-                    .disabled(groqKeyInput.isEmpty)
-
-                    if !groqSaveStatus.isEmpty {
-                        Text(groqSaveStatus).foregroundColor(.green).font(.caption)
-                    }
-                }
-
-                if !appState.availableGroqModels.isEmpty {
-                    HStack {
-                        Text("Model").frame(maxWidth: .infinity, alignment: .leading)
-                        Picker("", selection: $appState.selectedGroqModel) {
-                            ForEach(appState.availableGroqModels) { model in
-                                Text(model.displayName).tag(model.id)
-                            }
-                        }
-                        .labelsHidden()
-                    }
-                }
-
-                if let error = groqModelFetchError {
-                    Text(error).foregroundColor(.red).font(.caption)
                 }
             }
 
