@@ -21,7 +21,6 @@ async function getBalance() {
   console.log('\n[GROK]');
 
   try {
-    // If API key is missing or empty, skip external call and show mock balance
     if (!grok.apiKey || grok.apiKey === 'YOUR_GROK_KEY_HERE') {
       console.log(`✓ Grok Balance: ${MOCK_CREDITS} credits (mock)`);
       console.log('ℹ xAI does not provide a public balance API');
