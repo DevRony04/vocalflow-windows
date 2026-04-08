@@ -9,9 +9,9 @@
 
 module.exports = {
   deepgram: {
-    apiKey: "REDACTED_FOR_SECURITY"
+    apiKey: "YOUR_DEEPGRAM_KEY_HERE"
   },
   grok: {
-    apiKey: "",
+    apiKey: "YOUR_GROK_KEY_HERE",
   }
 };
