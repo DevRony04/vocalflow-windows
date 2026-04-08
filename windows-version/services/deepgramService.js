@@ -1,19 +1,9 @@
-/**
- * Deepgram Service
- * =================
- * Fetches account balance and project information from the Deepgram REST API.
- * Docs: https://developers.deepgram.com/reference/get-all-projects
- */
-
 const axios = require('axios');
 const { deepgram } = require('../config/api-keys.config');
 
 const DEEPGRAM_BASE_URL = 'https://api.deepgram.com/v1';
 
-/**
- * Fetches all Deepgram projects associated with the API key.
- * @returns {Promise<Array>} Array of project objects
- */
+
 async function getProjects() {
   const response = await axios.get(`${DEEPGRAM_BASE_URL}/projects`, {
     headers: {
@@ -24,11 +14,7 @@ async function getProjects() {
   return response.data.projects || [];
 }
 
-/**
- * Fetches the balance for a specific Deepgram project.
- * @param {string} projectId - The Deepgram project ID
- * @returns {Promise<Object>} Balance object with amount and units
- */
+
 async function getProjectBalance(projectId) {
   const response = await axios.get(
     `${DEEPGRAM_BASE_URL}/projects/${projectId}/balances`,
@@ -43,15 +29,10 @@ async function getProjectBalance(projectId) {
   return balances.length > 0 ? balances[0] : null;
 }
 
-/**
- * Main function: fetches and formats balance info from Deepgram.
- * @returns {Promise<void>}
- */
 async function getBalance() {
   console.log('\n[DEEPGRAM]');
 
   try {
-    // Validate that a key has been provided
     if (
       !deepgram.apiKey ||
       deepgram.apiKey === 'YOUR_DEEPGRAM_KEY_HERE'
@@ -82,8 +63,8 @@ async function getBalance() {
       const rawUnits = balance.units;
       const units =
         rawUnits !== null &&
-        rawUnits !== undefined &&
-        !isNaN(Number(rawUnits))
+          rawUnits !== undefined &&
+          !isNaN(Number(rawUnits))
           ? Number(rawUnits).toLocaleString()
           : 'Not Available';
       console.log(`✓ Balance: $${amount}`);

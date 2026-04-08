@@ -1,13 +1,3 @@
-/**
- * VocalFlow Windows - Entry Point
- * ================================
- * Fetches and displays Deepgram and Grok API balance information.
- *
- * Usage:
- *   node src/index.js
- *   npm start
- */
-
 'use strict';
 
 const deepgramService = require('../services/deepgramService');
@@ -31,10 +21,7 @@ function printFooter() {
   console.log('\n' + DIVIDER + '\n');
 }
 
-/**
- * Main execution function.
- * Runs both balance checks sequentially and formats output.
- */
+
 async function main() {
   printHeader();
 
