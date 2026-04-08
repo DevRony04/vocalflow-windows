@@ -9,7 +9,7 @@
 
 module.exports = {
   deepgram: {
-    apiKey: "8ea650e8aa3774b1316a2add1811f7745f559a63"
+    apiKey: "REDACTED_FOR_SECURITY"
   },
   grok: {
     apiKey: "",
