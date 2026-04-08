@@ -1,0 +1,22 @@
+{
+  "name": "vocalflow-windows",
+  "version": "1.0.0",
+  "description": "Windows-compatible Node.js implementation of VocalFlow — displays Deepgram and Grok API balance in the console.",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js"
+  },
+  "keywords": [
+    "vocalflow",
+    "deepgram",
+    "grok",
+    "xai",
+    "balance",
+    "windows"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.7.2"
+  }
+}
